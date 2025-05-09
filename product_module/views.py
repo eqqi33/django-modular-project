@@ -16,7 +16,7 @@ class ProductListView(LoginRequiredMixin, CustomPermissionRequiredMixin, ListVie
     model = Product
     template_name = 'product_module/product_list.html'
     paginate_by = 10
-    permission_required = 'product.view_product'
+    permission_required = 'product_module.view_product'
     permission_redirect_url = 'no_permission'
 
     def check_has_perm(self, access):
@@ -69,7 +69,7 @@ class ProductListView(LoginRequiredMixin, CustomPermissionRequiredMixin, ListVie
 class ProductCreateView(LoginRequiredMixin, AjaxResponseMixin, CustomPermissionRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
-    permission_required = 'product.add_product'
+    permission_required = 'product_module.add_product'
     permission_redirect_url = 'no_permission'
 
     def get(self, request, *args, **kwargs):
@@ -83,7 +83,7 @@ class ProductCreateView(LoginRequiredMixin, AjaxResponseMixin, CustomPermissionR
 class ProductUpdateView(LoginRequiredMixin, AjaxResponseMixin, CustomPermissionRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
-    permission_required = 'product.change_product'
+    permission_required = 'product_module.change_product'
     permission_redirect_url = 'no_permission'
 
     def get(self, request, *args, **kwargs):
@@ -99,7 +99,7 @@ class ProductUpdateView(LoginRequiredMixin, AjaxResponseMixin, CustomPermissionR
 
 class ProductDeleteView(LoginRequiredMixin, CustomPermissionRequiredMixin, DeleteView):
     model = Product
-    permission_required = 'product.delete_product'
+    permission_required = 'product_module.delete_product'
     permission_redirect_url = 'product_landing'
 
     def get_success_url(self):
@@ -108,7 +108,7 @@ class ProductDeleteView(LoginRequiredMixin, CustomPermissionRequiredMixin, Delet
 
 
 class ProductExportCSVView(LoginRequiredMixin, CustomPermissionRequiredMixin, View):
-    permission_required = 'product.export_product'
+    permission_required = 'product_module.export_product'
     permission_redirect_url = 'product_landing'
 
     def get(self, request):
@@ -125,7 +125,7 @@ class ProductExportCSVView(LoginRequiredMixin, CustomPermissionRequiredMixin, Vi
 
 
 class ProductExportExcelView(LoginRequiredMixin, CustomPermissionRequiredMixin, View):
-    permission_required = 'product.export_product'
+    permission_required = 'product_module.export_product'
     permission_redirect_url = 'product_landing'
 
     def get(self, request):

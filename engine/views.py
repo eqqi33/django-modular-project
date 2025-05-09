@@ -110,7 +110,7 @@ class CustomLoginView(LoginView):
     redirect_authenticated_user = True
 
     def get_success_url(self):
-        return self.get_redirect_url() or '/module/'
+        return self.get_redirect_url() or '/'
 
 class CustomLogoutView(LogoutView):
     next_page = reverse_lazy('custom_login')
@@ -124,3 +124,7 @@ class NoPermissionView(LoginRequiredMixin, TemplateView):
         if not any(m.message == "You do not have permission to access this page." for m in messages.get_messages(request)):
             messages.error(request, "You do not have permission to access this page.")
         return super().dispatch(request, *args, **kwargs)
+
+
+class HomeView(LoginRequiredMixin, TemplateView):
+    template_name = 'home.html'

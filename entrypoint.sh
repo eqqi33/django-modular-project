@@ -1,8 +1,6 @@
 #!/bin/bash
 if [ -f .env_docker ]; then
-  cp .env_docker docker/.env_docker
-else
-  echo > docker/.env_docker  # empty placeholder
+  cp .env_docker .env
 fi
 
 echo "⏳ Menunggu database siap..."

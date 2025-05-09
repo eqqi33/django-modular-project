@@ -11,7 +11,7 @@
 
                 <!-- Desktop Navigation Links -->
                 <div class="hidden md:ml-6 md:flex md:items-center md:space-x-4">
-                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium {% if request.resolver_match.url_name == 'home' %}text-primary-600 dark:text-primary-400{% else %}text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white{% endif %}">
+                    <a href="{% url 'home' %}" class="px-3 py-2 rounded-md text-sm font-medium {% if request.resolver_match.url_name == 'home' %}text-primary-600 dark:text-primary-400{% else %}text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white{% endif %}">
                         Dashboard
                     </a>
                     {% if request.user.is_superuser %}
@@ -27,7 +27,7 @@
                             </a>
                         {% endfor %}
                     {% endif %}
-                    {% if request.user.is_authenticated and request.user.is_staff %}
+                    {% if request.user.is_authenticated and request.user.is_superuser %}
                         <a href="/admin/" class="px-3 py-2 rounded-md text-sm font-medium {% if '/admin' in request.path %}text-primary-600 dark:text-primary-400{% else %}text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white{% endif %}">
                             Advanced Admin
                         </a>

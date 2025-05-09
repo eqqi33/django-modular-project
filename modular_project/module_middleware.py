@@ -16,7 +16,7 @@ class ModuleAccessMiddleware:
         module_prefix = path_parts[0]
 
         EXCLUDED_PREFIXES = [
-            'admin','accounts', 'static', 'media', 'api', 'module', 'logout', 'login',
+            'admin', 'accounts', 'static', 'media', 'api', 'module', 'logout', 'login',
             'favicon.ico', 'robots.txt', 'sitemap.xml'
         ]
 
@@ -30,13 +30,25 @@ class ModuleAccessMiddleware:
             try:
                 mod = ModuleRegistry.objects.get(name=expected_app_name)
                 if not mod.is_installed:
-                    messages.error(request, f"Module '{expected_app_name}' is not installed.")
-                    return redirect('module_list')
+                    if request.user.is_superuser:
+                        messages.error(request, f"Module '{expected_app_name}' is not installed.")
+                        return redirect('home')
+                    else:
+                        messages.error(request, f"Your request is not valid.")
+                        return redirect('home')
             except ModuleRegistry.DoesNotExist:
-                messages.error(request, f"Module '{expected_app_name}' is not registered.")
-                return redirect('module_list')
+                if request.user.is_superuser:
+                    messages.error(request, f"Module '{expected_app_name}' is not registered.")
+                    return redirect('home')
+                else:
+                    messages.error(request, f"Your request is not valid.")
+                    return redirect('home')
         else:
-            messages.error(request, f"Module '{expected_app_name}' is not in INSTALLED_APPS.")
-            return redirect('module_list')
+            if request.user.is_superuser:
+                messages.error(request, f"Module '{expected_app_name}' is not in INSTALLED_APPS.")
+                return redirect('home')
+            else:
+                messages.error(request, f"Your request is not valid.")
+                return redirect('home')
 
         return self.get_response(request)

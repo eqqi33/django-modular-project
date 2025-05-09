@@ -19,10 +19,11 @@ from django.contrib.auth.views import LogoutView
 from django.urls import path, include
 
 from engine.plugin_loader import load_plugin_urls
-from engine.views import CustomLoginView, CustomLogoutView, NoPermissionView
+from engine.views import CustomLoginView, CustomLogoutView, NoPermissionView, HomeView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', HomeView.as_view(), name='home'),
     path('', include('engine.urls')),
     path('login/', CustomLoginView.as_view(), name='custom_login'),
     path('logout/', CustomLogoutView.as_view(), name='custom_logout'),

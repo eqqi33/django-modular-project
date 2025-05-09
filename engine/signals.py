@@ -69,7 +69,6 @@ def setup_groups_and_users(sender, **kwargs):
 
     # Create demo users for each group
     test_users = {
-        'manager': 'manager123',
         'user': 'user123',
         'public': 'public123'
     }
@@ -81,7 +80,12 @@ def setup_groups_and_users(sender, **kwargs):
             user.is_staff = True  # Optional: for admin login access
             user.save()
 
+    # Create superuser manager
+    if not User.objects.filter(username='manager').exists():
+        admin = User.objects.create_superuser('manager', 'manager@example.com', 'manager123')
+        admin.groups.add(manager_group)
+
     # Create superuser admin
     if not User.objects.filter(username='admin').exists():
         admin = User.objects.create_superuser('admin', 'admin@example.com', 'admin123')
-        admin.groups.add(manager_group)  # Optional
+        admin.groups.add(manager_group)
