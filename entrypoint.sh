@@ -34,7 +34,15 @@ if [ -f test_roles.py ]; then
     python manage.py test_roles
 fi
 
-echo "✅ Menjalankan server..."
-exec python manage.py runserver 0.0.0.0:8000
+echo "✅ Menjalankan Gunicorn..."
+exec gunicorn modular_project.wsgi:application --bind 0.0.0.0:$PORT --workers 3
 
+# 🚀 Jalankan sesuai environment
+if [ "$RAILWAY_ENVIRONMENT" = "production" ] || [ "$IS_PRODUCTION" = "1" ]; then
+    echo "✅ Menjalankan Gunicorn (Production)..."
+    exec gunicorn modular_project.wsgi:application --bind 0.0.0.0:$PORT --workers 3
+else
+    echo "✅ Menjalankan Django Runserver (Development)..."
+    exec python manage.py runserver 0.0.0.0:8000
+fi
 echo "🚀 Server sudah jalan..."
