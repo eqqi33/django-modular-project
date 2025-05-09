@@ -64,25 +64,6 @@ docker-compose up --build
 
 Access via http://localhost:8000
 
-## 📂 Project Structure
-
-```
-.
-├── apps/
-│   ├── engine_module/
-│   └── example_module/
-├── core/
-│   └── context_processors.py
-├── templates/
-│   └── admin/  # Custom admin templates
-├── static/
-├── docker/
-├── manage.py
-└── requirements.txt
-```
-
----
-
 ## 📄 License
 
 This project is licensed for testing and demonstration purposes.
