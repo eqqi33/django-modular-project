@@ -36,6 +36,9 @@ ALLOWED_HOSTS = json.loads(os.environ.get('ALLOWED_HOST', '[]'))
 CSRF_COOKIE_SECURE = True  # Wajib jika pakai HTTPS
 SESSION_COOKIE_SECURE = True
 
+CSRF_TRUSTED_ORIGINS = ['https://django-modular-project-production.up.railway.app/']
+CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
+
 # Application definition
 
 INSTALLED_APPS = [
