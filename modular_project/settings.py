@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+import json
 import os
 from os.path import join, dirname
 from pathlib import Path
@@ -28,9 +29,9 @@ load_dotenv(dotenv_path)
 SECRET_KEY = 'django-insecure-1#c&t2g)+z3gj&l$o$u@5hh^f7nym!utd_(%tp7370p&3!8gx!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG_IS','false').lower() in ('true', '1', 't')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = json.loads(os.environ.get('ALLOWED_HOST', '[]'))
 
 
 # Application definition
