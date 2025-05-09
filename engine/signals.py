@@ -1,10 +1,48 @@
 from django.db.models.signals import post_migrate
 from django.contrib.auth.models import User, Group, Permission
 from django.dispatch import receiver
-from django.contrib.contenttypes.models import ContentType
-
 from engine.models import ModuleRegistry
 from product_module.models import Product  # Adjust this path if needed
+
+@receiver(post_migrate)
+def setup_modules_products_roles(sender, **kwargs):
+    # 1. Modules (with description & version)
+    modules = [
+        ("product_module", "Manage and display products", 1.0),
+        ("inventory_module", "Track inventory changes", 1.0),
+        ("sales_module", "Handle sales records", 1.0),
+        ("supplier_module", "Manage suppliers and their products", 1.0),
+        ("report_module", "Generate various reports", 1.0),
+        ("user_activity_module", "Track user activities", 1.0),
+        ("notification_module", "Send system notifications", 1.0),
+        ("audit_module", "Approval and audit system", 1.0),
+    ]
+
+    for name, desc, version in modules:
+        module, created = ModuleRegistry.objects.get_or_create(
+            name=name,
+            defaults={
+                "description": desc,
+                "version": version
+            }
+        )
+        if created:
+            print(f"✔ Module '{name}' created.")
+        else:
+            print(f"• Module '{name}' already exists.")
+
+    # 2. Products (with barcode)
+    if not Product.objects.exists():
+        Product.objects.bulk_create([
+            Product(name='Laptop', barcode='PRD001', price=8000000, stock=10),
+            Product(name='Mouse', barcode='PRD002', price=150000, stock=30),
+            Product(name='Keyboard', barcode='PRD003', price=250000, stock=20),
+            Product(name='Monitor', barcode='PRD004', price=2000000, stock=15),
+            Product(name='USB Hub', barcode='PRD005', price=75000, stock=50),
+        ])
+        print("✔ Products created.")
+    else:
+        print("• Products already exist.")
 
 @receiver(post_migrate)
 def setup_groups_and_users(sender, **kwargs):
