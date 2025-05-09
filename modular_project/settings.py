@@ -146,23 +146,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': "redis://%s%s:%s/%s" % ((':' + os.environ.get('REDIS_PASSWORD') + '@' if os.environ.get('REDIS_PASSWORD',False) else ''),os.environ.get('REDIS_HOST'),os.environ.get('REDIS_PORT'),'1'),
+        'LOCATION': "redis://%s%s:%s/%s" % ((os.environ.get('REDIS_USER') + ':' + os.environ.get('REDIS_PASSWORD') + '@' if os.environ.get('REDIS_PASSWORD', False) else ''), os.environ.get('REDIS_HOST'),
+                                            os.environ.get('REDIS_PORT'), '1'),
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
     }
 }
 
-DEFAULT_VALUE_CACHEOPS_REDIS = {
-    'host': os.environ.get('REDIS_HOST'),  # redis-server is on same machine
-    'port': os.environ.get('REDIS_PORT'),  # default redis port
-    'db': os.environ.get('REDIS_DB'),
-    # SELECT non-default redis database # using separate redis db or redis instance # is highly recommended
-    'socket_timeout': 3,  # connection timeout in seconds, optional
-    #    'unix_socket_path': '' # replaces host and port
-    # 'password': os.environ.get('REDIS_PASSWORD'),  # optional
-}
-CACHEOPS_REDIS = {**DEFAULT_VALUE_CACHEOPS_REDIS , **{'password': os.environ.get('REDIS_PASSWORD')}} if os.environ.get('REDIS_PASSWORD',False) else DEFAULT_VALUE_CACHEOPS_REDIS
+CACHEOPS_REDIS = f"redis://{os.getenv('REDIS_USER')}:{os.getenv('REDIS_PASSWORD')}@{os.getenv('REDIS_HOST', 'localhost')}:{os.getenv('REDIS_PORT', '6379')}/{os.getenv('REDIS_DB', '1')}"
 
 CACHEOPS = {
     'product_module.product': {'ops': 'all', 'timeout': 60*60},
