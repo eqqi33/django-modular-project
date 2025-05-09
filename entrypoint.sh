@@ -1,4 +1,10 @@
 #!/bin/bash
+if [ -f .env_docker ]; then
+  cp .env_docker docker/.env_docker
+else
+  echo > docker/.env_docker  # empty placeholder
+fi
+
 echo "⏳ Menunggu database siap..."
 sleep 5
 
