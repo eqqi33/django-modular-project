@@ -36,9 +36,12 @@ ALLOWED_HOSTS = ['*']
 CSRF_COOKIE_SECURE = True  # Wajib jika pakai HTTPS
 SESSION_COOKIE_SECURE = True
 
-CSRF_TRUSTED_ORIGINS = ['https://django-modular-project-production.up.railway.app/']
+CSRF_TRUSTED_ORIGINS = [
+    'https://django-modular-project-production.up.railway.app/',
+    'https://*.railway.app'
+]
 CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
-
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Application definition
 
 INSTALLED_APPS = [
@@ -166,3 +169,6 @@ CACHEOPS = {
 }
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
