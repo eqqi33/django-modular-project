@@ -33,6 +33,8 @@ DEBUG = os.environ.get('DEBUG_IS','false').lower() in ('true', '1', 't')
 
 ALLOWED_HOSTS = json.loads(os.environ.get('ALLOWED_HOST', '[]'))
 
+CSRF_COOKIE_SECURE = True  # Wajib jika pakai HTTPS
+SESSION_COOKIE_SECURE = True
 
 # Application definition
 
