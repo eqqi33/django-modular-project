@@ -1,0 +1,21 @@
+{
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.5",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "tailwindcss": "^4.1.5"
+  },
+  "name": "django-modular-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf node_modules package-lock.json",
+    "watch:css": "tailwindcss -i ./static/css/tailwind.css -o ./static/css/tailwind.min.css --minify --no-autoprefixer -w"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

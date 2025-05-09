@@ -1,0 +1,106 @@
+<button id="theme-toggle"
+        class="inline-flex items-center justify-center p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
+        aria-label="Toggle dark mode">
+    <!-- Sun icon (for dark mode) -->
+    <svg id="theme-toggle-light-icon" class="hidden h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+         viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+    </svg>
+
+    <!-- Moon icon (for light mode) -->
+    <svg id="theme-toggle-dark-icon" class="hidden h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+         viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+    </svg>
+
+    <!-- System icon (for auto mode) -->
+    <svg id="theme-toggle-auto-icon" class="hidden h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+         viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+    </svg>
+</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const themeToggle = document.getElementById('theme-toggle');
+        const lightIcon = document.getElementById('theme-toggle-light-icon');
+        const darkIcon = document.getElementById('theme-toggle-dark-icon');
+        const autoIcon = document.getElementById('theme-toggle-auto-icon');
+        const html = document.documentElement;
+
+        // Function to update the UI based on the current theme
+        function updateThemeUI(theme) {
+            // Hide all icons first
+            lightIcon.classList.add('hidden');
+            darkIcon.classList.add('hidden');
+            autoIcon.classList.add('hidden');
+
+            // Show the appropriate icon
+            if (theme === 'light') {
+                darkIcon.classList.remove('hidden'); // Show moon icon when in light mode
+            } else if (theme === 'dark') {
+                lightIcon.classList.remove('hidden'); // Show sun icon when in dark mode
+            } else {
+                autoIcon.classList.remove('hidden'); // Show system icon when in auto mode
+            }
+
+            // Apply the theme to the HTML element
+            applyTheme(theme);
+        }
+
+        // Function to apply the theme
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                html.classList.add('dark');
+            } else if (theme === 'light') {
+                html.classList.remove('dark');
+            } else if (theme === 'auto') {
+                // Check system preference
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    html.classList.add('dark');
+                } else {
+                    html.classList.remove('dark');
+                }
+            }
+        }
+
+        // Get the current theme from localStorage
+        let currentTheme = localStorage.getItem('theme') || 'auto';
+        updateThemeUI(currentTheme);
+
+        // Toggle theme when button is clicked
+        themeToggle.addEventListener('click', function () {
+            // Cycle through themes: light -> dark -> auto -> light
+            if (currentTheme === 'light') {
+                currentTheme = 'dark';
+            } else if (currentTheme === 'dark') {
+                currentTheme = 'auto';
+            } else {
+                currentTheme = 'light';
+            }
+
+            // Save to localStorage
+            localStorage.setItem('theme', currentTheme);
+
+            // Update UI
+            updateThemeUI(currentTheme);
+        });
+
+        // Listen for system preference changes if in auto mode
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+                if (localStorage.getItem('theme') === 'auto') {
+                    if (e.matches) {
+                        html.classList.add('dark');
+                    } else {
+                        html.classList.remove('dark');
+                    }
+                }
+            });
+        }
+    });
+</script>

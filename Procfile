@@ -1,0 +1,1 @@
+web: gunicorn modular_project.wsgi

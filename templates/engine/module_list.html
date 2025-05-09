@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}{{ module_title }}{% endblock %}
+
+{% block content %}
+    <div class="space-y-6">
+        <div class="flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ module_title }}</h1>
+        </div>
+        {% if can_view %}
+            {% if modules %}
+                <div class="space-y-4">
+                    {% for module in modules %}
+                        {% include "engine/module_list_item.html" with module=module can_edit=can_edit %}
+                    {% endfor %}
+                </div>
+
+                {% if is_paginated %}
+                    <div class="bg-white dark:bg-gray-800 px-4 py-3 flex items-center justify-between border-t border-gray-200 dark:border-gray-700 sm:px-6 rounded-lg shadow">
+                        <div class="flex-1 flex justify-between sm:hidden">
+                            {% if page_obj.has_previous %}
+                                <a href="?page={{ page_obj.previous_page_number }}"
+                                   class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    Previous
+                                </a>
+                            {% endif %}
+                            {% if page_obj.has_next %}
+                                <a href="?page={{ page_obj.next_page_number }}"
+                                   class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    Next
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                            <div>
+                                <p class="text-sm text-gray-700 dark:text-gray-300">
+                                    Showing
+                                    <span class="font-medium">{{ page_obj.start_index }}</span>
+                                    to
+                                    <span class="font-medium">{{ page_obj.end_index }}</span>
+                                    of
+                                    <span class="font-medium">{{ paginator.count }}</span>
+                                    results
+                                </p>
+                            </div>
+                            <div>
+                                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                                     aria-label="Pagination">
+                                    {% if page_obj.has_previous %}
+                                        <a href="?page={{ page_obj.previous_page_number }}"
+                                           class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            <span class="sr-only">Previous</span>
+                                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                 fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd"
+                                                      d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                                      clip-rule="evenodd"></path>
+                                            </svg>
+                                        </a>
+                                    {% endif %}
+
+                                    {% for i in paginator.page_range %}
+                                        {% if page_obj.number == i %}
+                                            <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 bg-primary-50 dark:bg-primary-900 text-sm font-medium text-primary-600 dark:text-primary-300">
+                                    {{ i }}
+                                </span>
+                                        {% elif i > page_obj.number|add:"-3" and i < page_obj.number|add:"3" %}
+                                            <a href="?page={{ i }}"
+                                               class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                                {{ i }}
+                                            </a>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if page_obj.has_next %}
+                                        <a href="?page={{ page_obj.next_page_number }}"
+                                           class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            <span class="sr-only">Next</span>
+                                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                 fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd"
+                                                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                      clip-rule="evenodd"></path>
+                                            </svg>
+                                        </a>
+                                    {% endif %}
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 text-center">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+                         viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                    </svg>
+                    <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">No {{ module_items_name }}</h3>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        Get started by creating a new {{ module_item_name }}.
+                    </p>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 text-center border border-red-200 dark:border-red-700">
+                <div class="flex justify-center mb-4">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900">
+                        <svg class="h-6 w-6 text-red-600 dark:text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+                             viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M12 9v2m0 4h.01M4.938 4h14.124c1.54 0 2.502 1.667 1.732 3L13.732 20c-.77 1.333-2.694 1.333-3.464 0L3.34 7C2.57 5.667 3.432 4 4.938 4z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white">Access Denied</h3>
+                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                    You do not have permission to view this page or access this module.
+                </p>
+            </div>
+        {% endif %}
+    </div>
+    {% include "components/confirm_modal.html" %}
+    {% if redirect_url %}
+        <script>
+            setTimeout(function () {
+                window.location.href = "{{ redirect_url }}";
+            }, 5000);  // 5 detik
+        </script>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,138 @@
+<nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between h-16">
+            <!-- Logo and primary navigation -->
+            <div class="flex">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="text-xl font-bold text-gray-800 dark:text-white">
+                        <span class="text-primary-600">Your</span>Dashboard
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <div class="hidden md:ml-6 md:flex md:items-center md:space-x-4">
+                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium {% if request.resolver_match.url_name == 'home' %}text-primary-600 dark:text-primary-400{% else %}text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white{% endif %}">
+                        Dashboard
+                    </a>
+                    {% if request.user.is_superuser %}
+                        <a href="{% url 'module_list' %}" class="px-3 py-2 rounded-md text-sm font-medium {% if '/module' in request.path %}text-primary-600 dark:text-primary-400{% else %}text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white{% endif %}">
+                            Modules
+                        </a>
+                    {% endif %}
+                    {% if installed_modules %}
+                        {% for module in installed_modules %}
+                            <a href="/{{ module.name|cut:'_module' }}/"
+                               class="{% if '/'|add:module.name|cut:'_module' in request.path %}text-primary-600 dark:text-primary-400{% else %}text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white{% endif %} px-3 py-2 rounded-md text-sm font-medium ">
+                                {{ module.name|cut:"_module"|capfirst }}
+                            </a>
+                        {% endfor %}
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_staff %}
+                        <a href="/admin/" class="px-3 py-2 rounded-md text-sm font-medium {% if '/admin' in request.path %}text-primary-600 dark:text-primary-400{% else %}text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white{% endif %}">
+                            Advanced Admin
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Right side navigation items -->
+            <div class="flex items-center">
+                <!-- Dark mode toggle -->
+                {% include "components/dark_toggle.html" %}
+
+                <!-- User dropdown -->
+                <div class="ml-3 relative">
+                    <div>
+                        <button type="button" id="user-menu-button" class="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500" aria-expanded="false" aria-haspopup="true">
+                            <span class="sr-only">Open user menu</span>
+                            <div class="h-8 w-8 rounded-full bg-primary-600 text-white flex items-center justify-center">
+                                {{ request.user.username|first|upper }}
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Dropdown menu, show/hide based on menu state -->
+                    <div id="user-dropdown" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                        <form method="post" action="{% url 'custom_logout' %}">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    class="w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                    role="menuitem">
+                                Sign out
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="flex items-center md:hidden ml-4">
+                    <button type="button" id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <!-- Icon when menu is closed -->
+                        <svg id="menu-closed-icon" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <!-- Icon when menu is open -->
+                        <svg id="menu-open-icon" class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile menu, show/hide based on menu state -->
+    <div id="mobile-menu" class="hidden md:hidden">
+        <div class="px-2 pt-2 pb-3 space-y-1">
+            <a href="#" class="block px-3 py-2 rounded-md text-base font-medium {% if request.resolver_match.url_name == 'home' %}text-primary-600 bg-gray-50 dark:bg-gray-700{% else %}text-gray-600 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700{% endif %}">
+                Dashboard
+            </a>
+            <a href="{% url 'module_list' %}" class="block px-3 py-2 rounded-md text-base font-medium {% if '/module' in request.path %}text-primary-600 bg-gray-50 dark:bg-gray-700{% else %}text-gray-600 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700{% endif %}">
+                Modules
+            </a>
+            {% if installed_modules %}
+                {% for module in installed_modules %}
+                    <a href="/{{ module.name|cut:'_module' }}/"
+                       class="{% if '/'|add:module.name|cut:'_module' in request.path %}text-primary-600 bg-gray-50 dark:bg-gray-700{% else %}text-gray-600 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700{% endif %} block px-3 py-2 rounded-md text-base font-medium ">
+                        {{ module.name|cut:"_module"|capfirst }}
+                    </a>
+                {% endfor %}
+            {% endif %}
+            {% if request.user.is_authenticated and request.user.is_staff %}
+                <a href="/admin/" class="block px-3 py-2 rounded-md text-base font-medium {% if '/admin' in request.path %}text-primary-600 bg-gray-50 dark:bg-gray-700{% else %}text-gray-600 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700{% endif %}">
+                    Advanced Admin
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<script>
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuClosedIcon = document.getElementById('menu-closed-icon');
+    const menuOpenIcon = document.getElementById('menu-open-icon');
+
+    mobileMenuButton.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+        menuClosedIcon.classList.toggle('hidden');
+        menuOpenIcon.classList.toggle('hidden');
+    });
+
+    // User dropdown toggle
+    const userMenuButton = document.getElementById('user-menu-button');
+    const userDropdown = document.getElementById('user-dropdown');
+
+    userMenuButton.addEventListener('click', function() {
+        userDropdown.classList.toggle('hidden');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!userMenuButton.contains(event.target) && !userDropdown.contains(event.target)) {
+            userDropdown.classList.add('hidden');
+        }
+    });
+</script>

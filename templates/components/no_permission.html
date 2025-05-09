@@ -1,0 +1,258 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Access Denied{% endblock %}</title>
+    <link href="{% static 'css/tailwind.min.css' %}" rel="stylesheet">
+    <script>
+        // Initialize dark mode from localStorage
+        (function () {
+            const theme = localStorage.getItem('theme') || 'auto';
+            if (theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
+    <style>
+        /* Base styles */
+        .dark {
+            color-scheme: dark;
+        }
+
+        /* Custom primary color variables */
+        :root {
+            --color-primary-50: 239, 246, 255;
+            --color-primary-100: 219, 234, 254;
+            --color-primary-200: 191, 219, 254;
+            --color-primary-300: 147, 197, 253;
+            --color-primary-400: 96, 165, 250;
+            --color-primary-500: 59, 130, 246;
+            --color-primary-600: 37, 99, 235;
+            --color-primary-700: 29, 78, 216;
+            --color-primary-800: 30, 64, 175;
+            --color-primary-900: 30, 58, 138;
+        }
+
+        /* Utility classes for primary colors */
+        .bg-primary-50 {
+            background-color: rgb(var(--color-primary-50));
+        }
+
+        .bg-primary-100 {
+            background-color: rgb(var(--color-primary-100));
+        }
+
+        .bg-primary-200 {
+            background-color: rgb(var(--color-primary-200));
+        }
+
+        .bg-primary-300 {
+            background-color: rgb(var(--color-primary-300));
+        }
+
+        .bg-primary-400 {
+            background-color: rgb(var(--color-primary-400));
+        }
+
+        .bg-primary-500 {
+            background-color: rgb(var(--color-primary-500));
+        }
+
+        .bg-primary-600 {
+            background-color: rgb(var(--color-primary-600));
+        }
+
+        .bg-primary-700 {
+            background-color: rgb(var(--color-primary-700));
+        }
+
+        .bg-primary-800 {
+            background-color: rgb(var(--color-primary-800));
+        }
+
+        .bg-primary-900 {
+            background-color: rgb(var(--color-primary-900));
+        }
+
+        .text-primary-50 {
+            color: rgb(var(--color-primary-50));
+        }
+
+        .text-primary-100 {
+            color: rgb(var(--color-primary-100));
+        }
+
+        .text-primary-200 {
+            color: rgb(var(--color-primary-200));
+        }
+
+        .text-primary-300 {
+            color: rgb(var(--color-primary-300));
+        }
+
+        .text-primary-400 {
+            color: rgb(var(--color-primary-400));
+        }
+
+        .text-primary-500 {
+            color: rgb(var(--color-primary-500));
+        }
+
+        .text-primary-600 {
+            color: rgb(var(--color-primary-600));
+        }
+
+        .text-primary-700 {
+            color: rgb(var(--color-primary-700));
+        }
+
+        .text-primary-800 {
+            color: rgb(var(--color-primary-800));
+        }
+
+        .text-primary-900 {
+            color: rgb(var(--color-primary-900));
+        }
+
+        .border-primary-50 {
+            border-color: rgb(var(--color-primary-50));
+        }
+
+        .border-primary-100 {
+            border-color: rgb(var(--color-primary-100));
+        }
+
+        .border-primary-200 {
+            border-color: rgb(var(--color-primary-200));
+        }
+
+        .border-primary-300 {
+            border-color: rgb(var(--color-primary-300));
+        }
+
+        .border-primary-400 {
+            border-color: rgb(var(--color-primary-400));
+        }
+
+        .border-primary-500 {
+            border-color: rgb(var(--color-primary-500));
+        }
+
+        .border-primary-600 {
+            border-color: rgb(var(--color-primary-600));
+        }
+
+        .border-primary-700 {
+            border-color: rgb(var(--color-primary-700));
+        }
+
+        .border-primary-800 {
+            border-color: rgb(var(--color-primary-800));
+        }
+
+        .border-primary-900 {
+            border-color: rgb(var(--color-primary-900));
+        }
+
+        .ring-primary-50 {
+            --tw-ring-color: rgb(var(--color-primary-50));
+        }
+
+        .ring-primary-100 {
+            --tw-ring-color: rgb(var(--color-primary-100));
+        }
+
+        .ring-primary-200 {
+            --tw-ring-color: rgb(var(--color-primary-200));
+        }
+
+        .ring-primary-300 {
+            --tw-ring-color: rgb(var(--color-primary-300));
+        }
+
+        .ring-primary-400 {
+            --tw-ring-color: rgb(var(--color-primary-400));
+        }
+
+        .ring-primary-500 {
+            --tw-ring-color: rgb(var(--color-primary-500));
+        }
+
+        .ring-primary-600 {
+            --tw-ring-color: rgb(var(--color-primary-600));
+        }
+
+        .ring-primary-700 {
+            --tw-ring-color: rgb(var(--color-primary-700));
+        }
+
+        .ring-primary-800 {
+            --tw-ring-color: rgb(var(--color-primary-800));
+        }
+
+        .ring-primary-900 {
+            --tw-ring-color: rgb(var(--color-primary-900));
+        }
+
+        /* Focus ring styles */
+        .focus\:ring-primary-500:focus {
+            --tw-ring-color: rgb(var(--color-primary-500));
+        }
+
+        /* Hover styles */
+        .hover\:bg-primary-600:hover {
+            background-color: rgb(var(--color-primary-600));
+        }
+
+        .hover\:bg-primary-700:hover {
+            background-color: rgb(var(--color-primary-700));
+        }
+
+        /* Transition utilities */
+        .transition-colors {
+            transition-property: background-color, border-color, color, fill, stroke;
+        }
+
+        .transition-opacity {
+            transition-property: opacity;
+        }
+
+        .transition-transform {
+            transition-property: transform;
+        }
+
+        .duration-150 {
+            transition-duration: 150ms;
+        }
+
+        .duration-200 {
+            transition-duration: 200ms;
+        }
+
+        .duration-300 {
+            transition-duration: 300ms;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
+<div class="max-w-2xl mx-auto py-16 px-4 sm:px-6 lg:px-8 text-center">
+
+    {% include "components/alert_message.html" %}
+
+    <svg class="mx-auto h-12 w-12 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M18.364 5.636L5.636 18.364M5.636 5.636l12.728 12.728"></path>
+    </svg>
+
+    <h1 class="mt-6 text-2xl font-bold text-gray-900 dark:text-white">Permission Denied</h1>
+    <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+        You do not have access to view this page. Please contact your administrator.
+    </p>
+</div>
+</body>
+</html>

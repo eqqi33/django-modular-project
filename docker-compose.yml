@@ -1,0 +1,79 @@
+services:
+  db:
+    container_name: test-db
+    image: postgres:16.3
+    environment:
+      POSTGRES_DB: modular_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - test_postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - test_network
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres", "-d", "modular_db" ]
+      interval: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  redis:
+    container_name: test-redis
+    image: redis:7.4
+    ports:
+      - "6379:6379"
+    command: [ "redis-server", "--appendonly", "yes" ]
+    volumes:
+      - test_redis_data:/data/redis
+    networks:
+      - test_network
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - test_network
+
+  pgadmin:
+    container_name: test-pgadmin
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - test_pgadmin_data:/data/pgadmin
+    ports:
+      - 8080:80
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - test_network
+    restart: unless-stopped
+
+# Setting up Networks
+networks:
+  test_network:
+    name: test_network
+    driver: bridge
+
+volumes:
+  test_postgres_data:
+  test_redis_data:
+  test_pgadmin_data:
