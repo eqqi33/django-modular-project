@@ -16,7 +16,7 @@ class ModuleAccessMiddleware:
         module_prefix = path_parts[0]
 
         EXCLUDED_PREFIXES = [
-            'admin', 'static', 'media', 'api', 'module', 'logout', 'login',
+            'admin','accounts', 'static', 'media', 'api', 'module', 'logout', 'login',
             'favicon.ico', 'robots.txt', 'sitemap.xml'
         ]
 
