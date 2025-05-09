@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-1#c&t2g)+z3gj&l$o$u@5hh^f7nym!utd_(%tp7370p&3!8gx!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG_IS','false').lower() in ('true', '1', 't')
 
-ALLOWED_HOSTS = json.loads(os.environ.get('ALLOWED_HOST', '[]'))
+ALLOWED_HOSTS = ['*']
 
 CSRF_COOKIE_SECURE = True  # Wajib jika pakai HTTPS
 SESSION_COOKIE_SECURE = True
@@ -53,8 +53,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
